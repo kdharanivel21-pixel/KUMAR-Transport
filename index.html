@@ -52,17 +52,6 @@ nav ul li a:hover{ color:#facc15; }
 section{ padding:80px 5%; }
 .section-title{ text-align:center; font-size: clamp(28px, 6vw, 42px); margin-bottom:40px; color:#facc15; text-transform: uppercase; }
 
-/* --- GRIDS --- */
-.grid-container{ display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:20px; }
-.card{ background:#1f2937; padding:30px; border-radius:15px; border:1px solid rgba(255,255,255,0.05); text-align: center; transition: 0.3s; }
-.card:hover { transform: translateY(-10px); border-color: #facc15; }
-.card h3{ color:#facc15; margin-bottom:15px; }
-.card p{ color:#ccc; font-size:15px; line-height:1.5; }
-
-/* --- VEHICLE DISPLAY --- */
-.fleet-box { background:#1f2937; padding:40px; border-radius:20px; display:flex; flex-wrap:wrap; gap:30px; align-items:center; justify-content:center; }
-.fleet-img { width:100%; max-width:500px; border-radius:15px; border:3px solid #facc15; }
-
 /* --- BOOKING FORM --- */
 .booking-box{ max-width:700px; margin:auto; background:#111827; padding:30px; border-radius:20px; border: 2px solid #facc15; }
 .form-logo-area { text-align: center; margin-bottom: 25px; }
@@ -96,7 +85,6 @@ section{ padding:80px 5%; }
     </a>
     <ul>
         <li><a href="#home">Home</a></li>
-        <li><a href="#services">Services</a></li>
         <li><a href="#booking">Book Now</a></li>
     </ul>
 </nav>
@@ -108,35 +96,6 @@ section{ padding:80px 5%; }
         <div style="margin-top:30px; display:flex; justify-content:center; gap:15px; flex-wrap:wrap;">
             <a href="tel:9443932361" class="btn call-btn">📞 Call 9443932361</a>
             <a href="https://wa.me/919443932361" target="_blank" class="btn whatsapp-btn">💬 WhatsApp Us</a>
-        </div>
-    </div>
-</section>
-
-<section id="fleet">
-    <h2 class="section-title">Our Vehicle</h2>
-    <div class="fleet-box">
-        <img src="TATA Ace2.jpg" alt="Kumar Transport Vehicle" class="fleet-img">
-        <div style="max-width:400px; text-align:left;">
-            <h3 style="color:#facc15; font-size:24px;">Trusted Delivery Truck</h3>
-            <p style="color:#ddd; margin-top:15px;">We provide well-maintained Tata Ace trucks for all your transportation needs. Safe and on-time delivery guaranteed.</p>
-        </div>
-    </div>
-</section>
-
-<section id="services">
-    <h2 class="section-title">Our Services</h2>
-    <div class="grid-container">
-        <div class="card">
-            <h3>House Shifting</h3>
-            <p>Safe and secure home shifting with careful loading of all items.</p>
-        </div>
-        <div class="card">
-            <h3>Shop Goods</h3>
-            <p>Daily business transport support for markets and local stores.</p>
-        </div>
-        <div class="card">
-            <h3>Parcel Delivery</h3>
-            <p>Quick delivery for packages and small loads at affordable prices.</p>
         </div>
     </div>
 </section>
@@ -202,21 +161,29 @@ function handleBooking(event) {
     btn.innerText = "Processing...";
     btn.disabled = true;
 
-    // 1. OPEN WHATSAPP FIRST
+    // 1. CONSTRUCT AND OPEN WHATSAPP MESSAGE
     let msg = `🚚 *KUMAR TRANSPORT BOOKING*%0A👤 *Name:* ${name}%0A📞 *Phone:* ${phone}%0A📍 *From:* ${pickup}%0A🏁 *To:* ${drop}%0A📦 *Goods:* ${details}`;
     window.open(`https://wa.me/919443932361?text=${msg}`, "_blank");
 
-    // 2. SAVE TO DATABASE SECOND
+    // 2. SAVE TO FIREBASE REALTIME DATABASE
     database.ref('bookings').push({
-        name, phone, pickup, drop, details, time: new Date().toLocaleString()
+        name: name,
+        phone: phone,
+        pickup: pickup,
+        drop: drop,
+        details: details,
+        time: new Date().toLocaleString()
     })
     .then(() => {
+        // Success: Reset form and button
         document.getElementById("bookingForm").reset();
         btn.innerText = "Confirm Booking ✅";
         btn.disabled = false;
     })
-    .catch(() => {
-        alert("Database Error! Make sure you updated your Rules in Firebase Console.");
+    .catch((error) => {
+        // Error handling
+        console.error("Firebase Error: ", error);
+        alert("Data not saved to database. Please check your Firebase 'Rules' tab and set .write to true.");
         btn.disabled = false;
         btn.innerText = "Confirm Booking ✅";
     });
