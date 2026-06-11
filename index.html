@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Kumar Transport | Tata Ace Service</title>
+<title>Velayutham Transport | Tata Ace Service</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
@@ -52,6 +52,45 @@ nav ul li a:hover{ color:#facc15; }
 section{ padding:80px 5%; }
 .section-title{ text-align:center; font-size: clamp(28px, 6vw, 42px); margin-bottom:40px; color:#facc15; text-transform: uppercase; }
 
+/* --- VEHICLE & EXTRA POINTS SECTION --- */
+.about-vehicle { background: #111827; }
+.vehicle-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.vehicle-image-box { 
+    flex: 1 1 450px; 
+    text-align: center; 
+    display: flex;
+    justify-content: center;
+}
+.vehicle-side-img { 
+    width: 100%; 
+    max-width: 380px; 
+    height: auto;
+    max-height: 500px; 
+    border-radius: 15px; 
+    border: 2px solid #facc15; 
+    box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+    object-fit: contain; 
+    background: #1f2937;
+}
+.points-box { flex: 1 1 450px; }
+.points-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+@media (max-width: 480px) { .points-grid { grid-template-columns: 1fr; } }
+.point-card { 
+    background: #1f2937; 
+    padding: 20px; 
+    border-radius: 12px; 
+    border-left: 4px solid #facc15; 
+}
+.point-card h3 { color: #facc15; font-size: 18px; margin-bottom: 8px; }
+.point-card p { color: #ccc; font-size: 14px; line-height: 1.4; }
+
 /* --- BOOKING FORM --- */
 .booking-box{ max-width:700px; margin:auto; background:#111827; padding:30px; border-radius:20px; border: 2px solid #facc15; }
 .form-logo-area { text-align: center; margin-bottom: 25px; }
@@ -81,17 +120,18 @@ section{ padding:80px 5%; }
 <nav>
     <a href="#home" class="logo-container">
         <img src="Kumar logo.png.png" alt="Logo" class="logo-img">
-        <span class="logo-text">KUMAR TRANSPORT</span>
+        <span class="logo-text">VELAYUTHAM TRANSPORT</span>
     </a>
     <ul>
         <li><a href="#home">Home</a></li>
+        <li><a href="#services">Our Fleet</a></li>
         <li><a href="#booking">Book Now</a></li>
     </ul>
 </nav>
 
 <section class="hero" id="home">
     <div class="hero-content">
-        <h1>KUMAR TRANSPORT</h1>
+        <h1>VELAYUTHAM TRANSPORT</h1>
         <p>Reliable Tata Ace transport service for house shifting, parcel delivery, and all goods transport. Available 24/7 with the best rates.</p>
         <div style="margin-top:30px; display:flex; justify-content:center; gap:15px; flex-wrap:wrap;">
             <a href="tel:9443932361" class="btn call-btn">📞 Call 9443932361</a>
@@ -100,11 +140,40 @@ section{ padding:80px 5%; }
     </div>
 </section>
 
+<section id="services" class="about-vehicle">
+    <h2 class="section-title">Why Choose Us?</h2>
+    <div class="vehicle-container">
+        <div class="vehicle-image-box">
+            <img src="TATA Ace2.jpg" alt="Tata Ace Portrait View" class="vehicle-side-img">
+        </div>
+        <div class="points-box">
+            <div class="points-grid">
+                <div class="point-card">
+                    <h3>⏱️ 24/7 Service</h3>
+                    <p>We work around the clock to meet your shifting timelines anytime, day or night.</p>
+                </div>
+                <div class="point-card">
+                    <h3>💰 Affordable Rates</h3>
+                    <p>Get the most competitive prices with zero hidden charges or surprises.</p>
+                </div>
+                <div class="point-card">
+                    <h3>🛡️ Safe Logistics</h3>
+                    <p>Your goods are treated with care and transported securely to prevent damages.</p>
+                </div>
+                <div class="point-card">
+                    <h3>Experienced Drivers</h3>
+                    <p>Skilled, professional drivers who know the best routes for quick deliveries.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 <section id="booking">
     <div class="booking-box">
         <div class="form-logo-area">
             <img src="Kumar logo.png.png" alt="Logo" class="form-logo">
-            <h2 style="color:#facc15">KUMAR TRANSPORT</h2>
+            <h2 style="color:#facc15">VELAYUTHAM TRANSPORT</h2>
         </div>
         <form id="bookingForm" onsubmit="handleBooking(event)">
             <input type="text" id="name" placeholder="Your Full Name" required>
@@ -131,16 +200,18 @@ section{ padding:80px 5%; }
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 
 <script>
-// --- YOUR FIREBASE CONFIG ---
+// --- UPDATED FIREBASE CONFIGURATION ---
 const firebaseConfig = {
   apiKey: "AIzaSyBDdJhkgcLkNyEpKemkH4aHRhLIBlDwOzQ",
   authDomain: "kumar-transport-vehicle.firebaseapp.com",
+  databaseURL: "https://kumar-transport-vehicle-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "kumar-transport-vehicle",
   storageBucket: "kumar-transport-vehicle.firebasestorage.app",
   messagingSenderId: "1045016611368",
   appId: "1:1045016611368:web:c82400bceba47471ec831d"
 };
 
+// Initialize Firebase using compat syntax
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 
@@ -161,11 +232,7 @@ function handleBooking(event) {
     btn.innerText = "Processing...";
     btn.disabled = true;
 
-    // 1. CONSTRUCT AND OPEN WHATSAPP MESSAGE
-    let msg = `🚚 *KUMAR TRANSPORT BOOKING*%0A👤 *Name:* ${name}%0A📞 *Phone:* ${phone}%0A📍 *From:* ${pickup}%0A🏁 *To:* ${drop}%0A📦 *Goods:* ${details}`;
-    window.open(`https://wa.me/919443932361?text=${msg}`, "_blank");
-
-    // 2. SAVE TO FIREBASE REALTIME DATABASE
+    // 1. SAVE TO FIREBASE REALTIME DATABASE FIRST
     database.ref('bookings').push({
         name: name,
         phone: phone,
@@ -175,15 +242,18 @@ function handleBooking(event) {
         time: new Date().toLocaleString()
     })
     .then(() => {
-        // Success: Reset form and button
+        // 2. ON SUCCESSFUL SAVE, REDIRECT TO WHATSAPP
+        let msg = `🚚 *KUMAR TRANSPORT BOOKING*%0A👤 *Name:* ${name}%0A📞 *Phone:* ${phone}%0A📍 *From:* ${pickup}%0A🏁 *To:* ${drop}%0A📦 *Goods:* ${details}`;
+        window.open(`https://wa.me/919443932361?text=${msg}`, "_blank");
+
+        // Reset form UI status
         document.getElementById("bookingForm").reset();
         btn.innerText = "Confirm Booking ✅";
         btn.disabled = false;
     })
     .catch((error) => {
-        // Error handling
         console.error("Firebase Error: ", error);
-        alert("Data not saved to database. Please check your Firebase 'Rules' tab and set .write to true.");
+        alert("Data not saved to database. Please check your Firebase Realtime Database Rules configuration.");
         btn.disabled = false;
         btn.innerText = "Confirm Booking ✅";
     });
