@@ -200,7 +200,7 @@ section{ padding:80px 5%; }
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 
 <script>
-// --- UPDATED FIREBASE CONFIGURATION ---
+// --- FIREBASE CONFIGURATION ---
 const firebaseConfig = {
   apiKey: "AIzaSyBDdJhkgcLkNyEpKemkH4aHRhLIBlDwOzQ",
   authDomain: "kumar-transport-vehicle.firebaseapp.com",
@@ -211,20 +211,36 @@ const firebaseConfig = {
   appId: "1:1045016611368:web:c82400bceba47471ec831d"
 };
 
-// Initialize Firebase using compat syntax
+// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 
 function handleBooking(event) {
     event.preventDefault();
     let name = document.getElementById("name").value;
-    let phone = document.getElementById("phone").value;
+    let phone = document.getElementById("phone").value.trim();
     let pickup = document.getElementById("pickup").value;
     let drop = document.getElementById("drop").value;
     let details = document.getElementById("details").value;
 
+    // --- SMART PHONE NUMBER VALIDATION ---
+    
+    // 1. Check length
     if(phone.length !== 10) {
-        alert("❌ Error: Please enter a 10 digit number");
+        alert("❌ Error: Please enter an exact 10 digit number");
+        return;
+    }
+    
+    // 2. Reject repeated numbers like 0000000000, 1111111111, etc.
+    const allSameDigits = /^(.)\1+$/;
+    if(allSameDigits.test(phone)) {
+        alert("❌ Error: Invalid fake number detected (All digits are identical)!");
+        return;
+    }
+
+    // 3. Reject sequential fake numbers like 1234567890
+    if(phone === "1234567890" || phone === "0123456789") {
+        alert("❌ Error: Invalid fake number sequence!");
         return;
     }
 
